@@ -1,5 +1,3 @@
-// app.js file is needed for handling the logic and interacting with the API
-
 async function fetchData(endpoint, method = 'GET', body = null) {
   const config = await fetchConfig();
   const url = `${config.baseUrl}${endpoint}`;
@@ -32,24 +30,14 @@ async function fetchConfig() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    // Fetch events and render on page load
-    const config = await fetchConfig();
-    const events = await fetchData('/api/2311-FSA-ET-WEB-PT-SF/events');
-    renderParties(events);
-  } catch (error) {
-    console.error('Error fetching events:', error);
-  }
 
-  // Add event listener for form submission
-  document.getElementById('partyForm').addEventListener('submit', addParty);
-});
+document.getElementById('partyForm').addEventListener('submit', addParty);
+
+// Fetch and render events on page load
+document.addEventListener('DOMContentLoaded', fetchParties);
 
 async function fetchParties() {
   try {
-    // Use fetchData to GET party data from the API
-    const config = await fetchConfig();
     const events = await fetchData('/api/2311-FSA-ET-WEB-PT-SF/events');
     renderParties(events);
   } catch (error) {
