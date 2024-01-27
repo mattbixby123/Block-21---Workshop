@@ -4,23 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Party Planner</title>
-  <!-- <script src="app.js"></script> -->
-    <!-- I could use this position for script file too. but only one head or end of body. -->
-
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-  <div id="partyList"></div>   <!-- Display List of Parties -->
- 
-  <form id="partyForm">  <!-- Form for Adding New Parties -->
+  <div id="partyList"></div> <!-- Display List of Parties -->
 
-      <button type="submit">Add Party</button> <!-- Add form fields for party details -->
+  <form id="partyForm">
+    <!-- Form for Adding New Parties -->
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
 
+    <label for="date">Date:</label>
+    <input type="date" id="date" required>
+
+    <label for="time">Time:</label>
+    <input type="time" id="time" required>
+
+    <label for="location">Location:</label>
+    <input type="text" id="location" required>
+
+    <label for="description">Description:</label>
+    <textarea id="description" rows="4" required></textarea>
+
+    <button type="submit">Add Party</button>
   </form>
 
-  <script src="app.js"></script> 
+  <script src="app.js"></script> <!-- Include your JavaScript file -->
 </body>
 
 </html>
