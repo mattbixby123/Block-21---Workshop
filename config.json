@@ -1,0 +1,7 @@
+{
+  "baseUrl": "https://fsa-crud-2aa9294fe819.herokuapp.com/2311-FSA-ET-WEB-SF",
+  "endpoint": "events",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}

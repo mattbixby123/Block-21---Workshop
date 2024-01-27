@@ -1,6 +1,5 @@
 // app.js file is needed for handling the logic and interacting with the API
 
- // Move the contents of api.js here
 async function fetchData(endpoint, method = 'GET', body = null) {
   const config = await fetchConfig();
   const url = `${config.baseUrl}${endpoint}`;
@@ -33,11 +32,15 @@ async function fetchConfig() {
   }
 }
 
-// contents of api.js end and app.js start (but theyre being combined into one file)
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Fetch parties and render on page load
-  fetchParties();
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    // Fetch events and render on page load
+    const config = await fetchConfig();
+    const events = await fetchData('/api/2311-FSA-ET-WEB-PT-SF/events');
+    renderParties(events);
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  }
 
   // Add event listener for form submission
   document.getElementById('partyForm').addEventListener('submit', addParty);
@@ -45,33 +48,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchParties() {
   try {
-      // Use Fetch to GET party data from the API
-      const response = await fetch('/events');
-      const parties = await response.json();
-
-      // Render parties on the page
-      renderParties(parties);
+    // Use fetchData to GET party data from the API
+    const config = await fetchConfig();
+    const events = await fetchData('/api/2311-FSA-ET-WEB-PT-SF/events');
+    renderParties(events);
   } catch (error) {
-      console.error('Error fetching parties:', error);
+    console.error('Error fetching events:', error);
   }
 }
 
-function renderParties(parties) {
+function renderParties(response) {
+  const parties = response.parties || [];
+
   // Render each party on the page
   const partyList = document.getElementById('partyList');
   partyList.innerHTML = '';
 
   parties.forEach(party => {
-      const partyElement = document.createElement('div');
-      partyElement.innerHTML = `
-          <p>Name: ${party.name}</p>
-          <p>Date: ${party.date}</p>
-          <p>Time: ${party.time}</p>
-          <p>Location: ${party.location}</p>
-          <p>Description: ${party.description}</p>
-          <button onclick="deleteParty(${party.id})">Delete</button>
-      `;
-      partyList.appendChild(partyElement);
+    const partyElement = document.createElement('div');
+    partyElement.innerHTML = `
+      <p>Name: ${party.name}</p>
+      <p>Date: ${party.date}</p>
+      <p>Time: ${party.time}</p>
+      <p>Location: ${party.location}</p>
+      <p>Description: ${party.description}</p>
+      <button onclick="deleteParty(${party.id})">Delete</button>
+    `;
+    partyList.appendChild(partyElement);
   });
 }
 
@@ -80,41 +83,40 @@ async function addParty(event) {
 
   // Extract party details from the form
   const partyData = {
-      name: document.getElementById('name').value,
-      date: document.getElementById('date').value,
-      time: document.getElementById('time').value,
-      location: document.getElementById('location').value,
-      description: document.getElementById('description').value,
+    name: document.getElementById('name').value,
+    date: document.getElementById('date').value,
+    time: document.getElementById('time').value,
+    location: document.getElementById('location').value,
+    description: document.getElementById('description').value,
   };
 
   try {
-      // Use Fetch to POST a new party to the API
-      const response = await fetch('/events', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(partyData),
-      });
+    // Use Fetch to POST a new party to the API
+    const config = await fetchConfig();
+    const response = await fetch(`${config.baseUrl}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(partyData),
+    });
 
-      // Refresh the list of parties after adding a new one
-      fetchParties();
+    // Refresh the list of parties after adding a new one
+    fetchParties();
   } catch (error) {
-      console.error('Error adding party:', error);
+    console.error('Error adding party:', error);
   }
 }
 
 async function deleteParty(partyId) {
   try {
-      // Use Fetch to DELETE a party from the API
-      await fetch(`/events/${partyId}`, {
-          method: 'DELETE',
-      });
+    // Use Fetch to DELETE a party from the API
+    const config = await fetchConfig();
+    await fetch(`${config.baseUrl}/${partyId}`, {
+      method: 'DELETE',
+    });
 
-      // Refresh the list of parties after deleting one
-      fetchParties();
+    // Refresh the list of parties after deleting one
+    fetchParties();
   } catch (error) {
-      console.error('Error deleting party:', error);
+    console.error('Error deleting party:', error);
   }
 }
-
