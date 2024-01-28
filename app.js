@@ -1,4 +1,4 @@
-// Updated events section
+
 const COHORT = "2311-FSA-ET-WEB-PT-SF";
 const API_URL_EVENTS = `http://fsa-crud-2aa9294fe819.herokuapp.com/api/${COHORT}/events`;
 
@@ -8,7 +8,7 @@ const stateEvents = {
 
 const partyList = document.querySelector("#partyList");
 
-const addPartyForm = document.querySelector("#addParty");
+const addPartyForm = document.querySelector("#addPartyForm");
 addPartyForm.addEventListener("submit", addParty);
 
 /**
@@ -19,8 +19,10 @@ async function fetchParties() {
     // Fetch parties
     const events = await fetchData(API_URL_EVENTS);
 
-    // Update state with fetched parties
-    stateEvents.parties = events.parties || [];
+
+    // console.log('API Response:', events); - console log to show how the API data is structured
+    
+    stateEvents.parties = events.data || []; // Update state with fetched parties data (array)
 
     // Render parties
     renderPartiesList();
@@ -72,10 +74,11 @@ function renderPartiesList() {
 
   const partyElements = stateEvents.parties.map((party) => {
     const li = document.createElement("li");
+    li.className = "party-item"; // Apply the new CSS class
+
     li.innerHTML = `
       <p>Name: ${party.name}</p>
       <p>Date: ${party.date}</p>
-      <p>Time: ${party.time}</p>
       <p>Location: ${party.location}</p>
       <p>Description: ${party.description}</p>
       <button onclick="deleteParty(${party.id})">Delete</button>
@@ -112,7 +115,6 @@ async function addParty(event) {
   const partyData = {
     name: addPartyForm.name.value,
     date: new Date(addPartyForm.date.value),
-    time: addPartyForm.time.value,
     location: addPartyForm.location.value,
     description: addPartyForm.description.value,
   };
@@ -128,6 +130,13 @@ async function addParty(event) {
       throw new Error("Failed to create party");
     }
 
+    // Assuming the API response contains the newly added party data
+    const newParty = await response.json();
+    console.log('New Party added:', newParty);
+    // Update state with the new party
+    stateEvents.parties = [...stateEvents.parties, newParty];
+
+    // Render parties
     renderPartiesList();
   } catch (error) {
     console.error('Error adding party:', error);
@@ -136,3 +145,4 @@ async function addParty(event) {
 
 document.addEventListener('DOMContentLoaded', fetchParties);
 
+  

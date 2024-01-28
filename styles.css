@@ -1,2 +1,34 @@
-/* styles.css is used for styling your website (optional but recommended - could and might use inline). */
 
+/* styles.css */
+
+#partyList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.party-item {
+  width: 200px;
+  height: auto;
+  border: 1px solid #ccc;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.party-item p {
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.party-item button {
+  margin-top: auto; /* Push the button to the bottom of the box */
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
