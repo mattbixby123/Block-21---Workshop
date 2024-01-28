@@ -8,11 +8,11 @@
 </head>
 
 <body>
-
-  <div id="partyList"></div> <!-- Display List of Parties -->
-  <div id="addParty"></div>
-  
-  <form id="partyForm">
+  <div class="title">
+    <h1>Welcome to Party Palace</h1>
+    <h3>(Please add or delete entries as needed)</h3>
+  </div>
+  <form id="addPartyForm">
     <!-- Form for Adding New Parties -->
     <label for="name">Name:</label>
     <input type="text" id="name" placeholder='Enter Name' required>
@@ -32,6 +32,8 @@
     <button type="submit">Add Party</button>
   </form>
 
+  <div id="partyList"></div> <!-- Display List of Parties -->
+  
   <script src="app.js"></script> <!-- Include your JavaScript file -->
 </body>
 
