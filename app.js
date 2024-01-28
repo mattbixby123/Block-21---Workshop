@@ -1,6 +1,6 @@
 // Updated events section
 const COHORT = "2311-FSA-ET-WEB-PT-SF";
-const API_URL_EVENTS = `https://fsa-async-await.herokuapp.com/api/${COHORT}/events`;
+const API_URL_EVENTS = `http://fsa-crud-2aa9294fe819.herokuapp.com/api/${COHORT}/events`;
 
 const stateEvents = {
   parties: [],
@@ -37,13 +37,16 @@ async function fetchParties() {
  * @returns {Promise<Object>} - JSON response from the API
  */
 async function fetchData(endpoint, method = 'GET', body = null) {
-  const config = await fetchConfig();
-  const url = `${config.baseUrl}${endpoint}`;
+  const url = endpoint;
+
+  const headers = {
+    'Content-Type': 'application/json',
+  };
 
   try {
     const response = await fetch(url, {
       method,
-      headers: config.headers,
+      headers,
       body: body ? JSON.stringify(body) : null,
     });
 
@@ -93,7 +96,7 @@ async function deleteParty(partyId) {
       throw new Error('Failed to delete party');
     }
 
-    renderParties();
+    renderPartiesList();
   } catch (error) {
     console.error('Error deleting party:', error);
   }
@@ -125,7 +128,7 @@ async function addParty(event) {
       throw new Error("Failed to create party");
     }
 
-    renderParties();
+    renderPartiesList();
   } catch (error) {
     console.error('Error adding party:', error);
   }
